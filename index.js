@@ -1,12 +1,11 @@
 const express = require("express");
-const dotenv = require('dotenv');
+const dotenv = require("dotenv");
 const cors = require("cors");
 
 // Express server
 const app = express();
 app.use(cors());
 dotenv.config();
-
 
 // APIs
 app.get("/api/customers/", (req, res) => {
@@ -19,7 +18,24 @@ app.get("/api/transactions/", (req, res) => {
   res.json(transactions);
 });
 
-// Server running
+app.get("/api/joined", (req, res) => {
+  const customers = require("./DB/Customer");
+  const transactions = require("./DB/Transaction");
+
+  res.json(
+    customers.map((customer) => {
+      const customerTransactions = transactions.filter(
+        (transaction) => transaction.customer_id === customer.id
+      );
+      return {
+        ...customer,
+        transactions: customerTransactions,
+      };
+    })
+  );
+});
+
+// Server listenning
 const PORT = 3000;
 const HOST = "0.0.0.0";
 
