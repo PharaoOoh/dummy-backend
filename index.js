@@ -20,6 +20,9 @@ app.get("/api/transactions/", (req, res) => {
 });
 
 // Server running
-app.listen(process.env.PORT, process.env.HOST, () => {
-  console.log(`Server is running on http://${process.env.HOST}:${process.env.PORT}`);
+const PORT = 3000;
+const HOST = "0.0.0.0";
+
+app.listen(PORT, HOST, () => {
+  console.log(`Server is running on http://${HOST}:${PORT}`);
 });
