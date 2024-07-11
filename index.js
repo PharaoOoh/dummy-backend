@@ -1,6 +1,8 @@
+const cors = require("cors");
 const express = require("express");
 const dotenv = require("dotenv");
-const cors = require("cors");
+const customers = require("./DB/Customer");
+const transactions = require("./DB/Transaction");
 
 // Express server
 const app = express();
@@ -8,20 +10,11 @@ app.use(cors());
 dotenv.config();
 
 // APIs
-app.get("/api/customers/", (req, res) => {
-  const customers = require("./DB/Customer");
+app.get("/api/customers", (req, res) => {
   res.json(customers);
 });
 
-app.get("/api/transactions/", (req, res) => {
-  const transactions = require("./DB/Transaction");
-  res.json(transactions);
-});
-
-app.get("/api/joined", (req, res) => {
-  const customers = require("./DB/Customer");
-  const transactions = require("./DB/Transaction");
-
+app.get("/api/customers/joined", (req, res) => {
   res.json(
     customers.map((customer) => {
       const customerTransactions = transactions.filter(
@@ -30,6 +23,24 @@ app.get("/api/joined", (req, res) => {
       return {
         ...customer,
         transactions: customerTransactions,
+      };
+    })
+  );
+});
+
+app.get("/api/transactions", (req, res) => {
+  res.json(transactions);
+});
+
+app.get("/api/transactions/joined", (req, res) => {
+  res.json(
+    transactions.map((transaction) => {
+      const customer = customers.find(
+        (customer) => customer.id === transaction.customer_id
+      );
+      return {
+        ...transaction,
+        customers: customer,
       };
     })
   );
