@@ -40,7 +40,7 @@ app.get("/api/transactions/joined", (req, res) => {
       );
       return {
         ...transaction,
-        customers: customer,
+        customer: customer,
       };
     })
   );
